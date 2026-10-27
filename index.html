@@ -1,0 +1,1702 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Проект «Протокол» — Бизнес-презентация для Жанны Елисеевой</title>
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/cormorant-garamond@5.0.8/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fontsource/manrope@5.0.8/index.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+    :root {
+        --emerald: #004E2F;
+        --emerald-light: #006B40;
+        --emerald-soft: rgba(0, 78, 47, 0.08);
+        --emerald-mid: rgba(0, 78, 47, 0.15);
+        --taupe: #EAE5DD;
+        --taupe-warm: #E5E0D8;
+        --taupe-cool: #DFDAD2;
+        --taupe-dark: #D5D0C8;
+        --rose: #E6D5D0;
+        --rose-soft: rgba(230, 213, 208, 0.6);
+        --graphite: #2D2D2D;
+        --graphite-deep: #1F1F1F;
+        --graphite-darkest: #1A1A1A;
+        --text-dark: #2D2D2D;
+        --text-dim: rgba(45, 45, 45, 0.6);
+        --text-light: #EAE5DD;
+        --text-light-dim: rgba(234, 229, 221, 0.65);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: 'Manrope', sans-serif;
+        background-color: var(--taupe);
+        color: var(--text-dark);
+        overflow-x: hidden;
+        line-height: 1.7;
+        font-weight: 400;
+        letter-spacing: 0.005em;
+    }
+
+    h1, h2, h3, h4, .serif {
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 400;
+        font-style: italic;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+    }
+
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 48px;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: var(--emerald);
+        z-index: 200;
+        width: 0;
+        transition: background 0.4s ease;
+    }
+
+    .progress-bar.inverted {
+        background: var(--rose);
+    }
+
+    /* Navigation */
+    .nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 100;
+        background: rgba(234, 229, 221, 0.92);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 78, 47, 0.08);
+        transition: all 0.4s ease;
+    }
+
+    .nav.scrolled {
+        background: rgba(45, 45, 45, 0.95);
+        border-bottom-color: rgba(234, 229, 221, 0.1);
+    }
+
+    .nav.scrolled .logo { color: var(--text-light); }
+    .nav.scrolled .nav-meta { color: var(--text-light-dim); }
+
+    .nav-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 22px 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 24px;
+        color: var(--emerald);
+        letter-spacing: 0.2em;
+        font-weight: 500;
+        font-style: italic;
+        transition: color 0.4s ease;
+    }
+
+    .nav-meta {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+        font-weight: 500;
+        transition: color 0.4s ease;
+    }
+
+    /* Hero */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 160px 0 120px;
+        position: relative;
+        background:
+            radial-gradient(ellipse at 85% 15%, rgba(230, 213, 208, 0.5) 0%, transparent 55%),
+            radial-gradient(ellipse at 15% 85%, rgba(0, 78, 47, 0.04) 0%, transparent 50%),
+            var(--taupe);
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+        opacity: 0.3;
+    }
+
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 100px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--emerald);
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 500;
+    }
+
+    .eyebrow::before {
+        content: '';
+        width: 40px;
+        height: 1px;
+        background: var(--emerald);
+    }
+
+    .hero h1 {
+        font-size: clamp(3rem, 5.5vw, 5rem);
+        line-height: 1.02;
+        margin-bottom: 40px;
+        color: var(--emerald);
+        font-weight: 400;
+    }
+
+    .hero h1 em {
+        font-style: italic;
+    }
+
+    .hero-lead {
+        font-size: 19px;
+        color: var(--text-dim);
+        max-width: 580px;
+        margin-bottom: 56px;
+        line-height: 1.75;
+    }
+
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        padding-top: 48px;
+        border-top: 1px solid rgba(0, 78, 47, 0.15);
+    }
+
+    .stat-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 52px;
+        color: var(--emerald);
+        line-height: 1;
+        margin-bottom: 12px;
+        font-weight: 400;
+        font-style: italic;
+    }
+
+    .stat-label {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .hero-side {
+        border-left: 1px solid rgba(0, 78, 47, 0.2);
+        padding-left: 48px;
+    }
+
+    .hero-side-label {
+        font-size: 11px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--emerald);
+        margin-bottom: 28px;
+        font-weight: 500;
+    }
+
+    .hero-side-item {
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(0, 78, 47, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+    }
+
+    .hero-side-item:first-of-type {
+        border-top: 1px solid rgba(0, 78, 47, 0.1);
+    }
+
+    .hero-side-item span:first-child {
+        font-size: 13px;
+        color: var(--text-dark);
+    }
+
+    .hero-side-item span:last-child {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        color: var(--emerald);
+        white-space: nowrap;
+        font-style: italic;
+        font-weight: 500;
+    }
+
+    section {
+        padding: 140px 0;
+        position: relative;
+    }
+
+    .section-header {
+        margin-bottom: 96px;
+        max-width: 760px;
+    }
+
+    .section-num {
+        font-size: 11px;
+        letter-spacing: 0.35em;
+        color: var(--emerald);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .section-title {
+        font-size: clamp(2.5rem, 4.5vw, 4rem);
+        line-height: 1.08;
+        margin-bottom: 32px;
+        color: var(--emerald);
+        font-weight: 400;
+    }
+
+    .section-lead {
+        font-size: 18px;
+        color: var(--text-dim);
+        line-height: 1.75;
+        max-width: 640px;
+    }
+
+    /* Philosophy */
+    .philosophy {
+        background: var(--taupe-warm);
+    }
+
+    .philosophy-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 100px;
+        align-items: start;
+    }
+
+    .philosophy-quote {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 32px;
+        line-height: 1.35;
+        font-style: italic;
+        color: var(--emerald);
+        position: relative;
+        padding-left: 36px;
+        border-left: 2px solid var(--rose);
+        font-weight: 400;
+    }
+
+    .philosophy-points {
+        display: flex;
+        flex-direction: column;
+        gap: 36px;
+    }
+
+    .phil-point {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .phil-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        color: var(--emerald);
+        padding-top: 4px;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .phil-point h4 {
+        font-size: 19px;
+        margin-bottom: 8px;
+        color: var(--text-dark);
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        font-style: normal;
+        letter-spacing: -0.01em;
+    }
+
+    .phil-point p {
+        font-size: 14px;
+        color: var(--text-dim);
+        line-height: 1.65;
+    }
+
+    /* Audience */
+    .audience-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    .audience-card {
+        background: var(--taupe);
+        border: 1px solid rgba(0, 78, 47, 0.1);
+        padding: 56px 48px;
+        position: relative;
+        transition: all 0.5s ease;
+        border-radius: 8px;
+    }
+
+    .audience-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--emerald) 0%, var(--rose) 100%);
+        opacity: 0;
+        transition: opacity 0.5s;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .audience-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 60px rgba(0, 78, 47, 0.08);
+    }
+
+    .audience-card:hover::before {
+        opacity: 1;
+    }
+
+    .audience-tag {
+        display: inline-block;
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--emerald);
+        padding: 8px 16px;
+        border: 1px solid var(--emerald);
+        margin-bottom: 28px;
+        font-weight: 500;
+        border-radius: 4px;
+    }
+
+    .audience-card h3 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: var(--emerald);
+        font-weight: 400;
+    }
+
+    .audience-meta {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(0, 78, 47, 0.12);
+        line-height: 1.6;
+    }
+
+    .audience-meta strong {
+        color: var(--emerald);
+        font-weight: 600;
+    }
+
+    .audience-list {
+        list-style: none;
+    }
+
+    .audience-list li {
+        font-size: 14px;
+        color: var(--text-dark);
+        padding: 12px 0 12px 28px;
+        position: relative;
+        border-bottom: 1px solid rgba(0, 78, 47, 0.06);
+    }
+
+    .audience-list li:last-child {
+        border-bottom: none;
+    }
+
+    .audience-list li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 18px;
+        width: 12px;
+        height: 2px;
+        background: var(--emerald);
+    }
+
+    /* Products */
+    .products {
+        background: var(--taupe-cool);
+    }
+
+    .funnel {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 80px;
+    }
+
+    .funnel-step {
+        display: grid;
+        grid-template-columns: 70px 1fr 220px 160px;
+        gap: 40px;
+        align-items: center;
+        padding: 36px 40px;
+        background: var(--taupe);
+        border-left: 3px solid var(--emerald);
+        transition: all 0.4s ease;
+        border-radius: 8px;
+    }
+
+    .funnel-step:hover {
+        transform: translateX(12px);
+        box-shadow: 0 20px 40px rgba(0, 78, 47, 0.08);
+    }
+
+    .funnel-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 32px;
+        color: var(--emerald);
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .funnel-name {
+        font-size: 20px;
+        color: var(--emerald);
+        margin-bottom: 6px;
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .funnel-desc {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.6;
+    }
+
+    .funnel-format {
+        font-size: 12px;
+        color: var(--text-dim);
+        letter-spacing: 0.05em;
+    }
+
+    .funnel-price {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 24px;
+        color: var(--emerald);
+        text-align: right;
+        font-style: italic;
+        font-weight: 500;
+    }
+
+    /* Ecosystem */
+    .eco-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+    }
+
+    .eco-card {
+        background: var(--taupe);
+        border: 1px solid rgba(0, 78, 47, 0.08);
+        padding: 44px 32px;
+        transition: all 0.4s ease;
+        position: relative;
+        border-radius: 8px;
+    }
+
+    .eco-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--emerald);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .eco-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 60px rgba(0, 78, 47, 0.08);
+    }
+
+    .eco-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .eco-icon {
+        width: 52px;
+        height: 52px;
+        border: 1px solid var(--emerald);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 28px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 24px;
+        color: var(--emerald);
+        background: var(--emerald-soft);
+        font-style: italic;
+    }
+
+    .eco-card h4 {
+        font-size: 19px;
+        margin-bottom: 14px;
+        color: var(--emerald);
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        font-style: normal;
+    }
+
+    .eco-card p {
+        font-size: 13px;
+        color: var(--text-dim);
+        line-height: 1.65;
+        margin-bottom: 24px;
+    }
+
+    .eco-tools {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--emerald);
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 78, 47, 0.1);
+        font-weight: 500;
+    }
+
+    /* Timeline - dark */
+    .timeline {
+        background: var(--graphite);
+        color: var(--text-light);
+    }
+
+    .timeline .section-title { color: var(--text-light); }
+    .timeline .section-lead { color: var(--text-light-dim); }
+    .timeline .section-num { color: var(--rose); }
+
+    .timeline-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        position: relative;
+    }
+
+    .timeline-grid::before {
+        content: '';
+        position: absolute;
+        top: 24px;
+        left: 12.5%;
+        right: 12.5%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--rose), transparent);
+        opacity: 0.3;
+    }
+
+    .timeline-step {
+        padding: 0 24px;
+        position: relative;
+    }
+
+    .timeline-dot {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--graphite);
+        border: 1px solid var(--rose);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 28px;
+        position: relative;
+        z-index: 2;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        color: var(--rose);
+        font-style: italic;
+    }
+
+    .timeline-period {
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--rose);
+        margin-bottom: 14px;
+        font-weight: 500;
+    }
+
+    .timeline-step h4 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: var(--text-light);
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        font-style: normal;
+    }
+
+    .timeline-step ul {
+        list-style: none;
+        font-size: 13px;
+        color: var(--text-light-dim);
+        line-height: 1.7;
+    }
+
+    .timeline-step ul li {
+        padding: 6px 0 6px 20px;
+        position: relative;
+    }
+
+    .timeline-step ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 14px;
+        width: 8px;
+        height: 1px;
+        background: var(--rose);
+    }
+
+    /* Finance - dark */
+    .finance {
+        background: var(--graphite);
+        color: var(--text-light);
+    }
+
+    .finance .section-title { color: var(--text-light); }
+    .finance .section-lead { color: var(--text-light-dim); }
+    .finance .section-num { color: var(--rose); }
+
+    .finance-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        margin-bottom: 80px;
+    }
+
+    .finance-card {
+        background: var(--graphite-deep);
+        border: 1px solid rgba(234, 229, 221, 0.08);
+        padding: 48px;
+        border-radius: 8px;
+    }
+
+    .finance-card h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: var(--text-light);
+        font-weight: 400;
+    }
+
+    .finance-card-sub {
+        font-size: 12px;
+        color: var(--text-light-dim);
+        margin-bottom: 36px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid rgba(234, 229, 221, 0.08);
+        letter-spacing: 0.05em;
+    }
+
+    .chart-wrap {
+        position: relative;
+        height: 300px;
+    }
+
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 28px;
+        margin-top: 80px;
+    }
+
+    .kpi {
+        background: var(--graphite-deep);
+        border: 1px solid rgba(234, 229, 221, 0.08);
+        padding: 40px 32px;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .kpi::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--emerald), var(--rose));
+    }
+
+    .kpi-label {
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--text-light-dim);
+        margin-bottom: 20px;
+        margin-top: 12px;
+        font-weight: 500;
+    }
+
+    .kpi-value {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 48px;
+        color: var(--rose);
+        line-height: 1;
+        margin-bottom: 12px;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .kpi-note {
+        font-size: 12px;
+        color: var(--text-light-dim);
+        line-height: 1.5;
+    }
+
+    .budget-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 48px;
+        background: var(--graphite-deep);
+        border: 1px solid rgba(234, 229, 221, 0.08);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .budget-table th, .budget-table td {
+        padding: 22px 28px;
+        text-align: left;
+        border-bottom: 1px solid rgba(234, 229, 221, 0.06);
+        font-size: 14px;
+    }
+
+    .budget-table th {
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--rose);
+        font-weight: 600;
+        font-family: 'Manrope', sans-serif;
+        font-style: normal;
+    }
+
+    .budget-table td {
+        color: var(--text-light);
+    }
+
+    .budget-table td:last-child {
+        text-align: right;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 20px;
+        color: var(--rose);
+        font-style: italic;
+        font-weight: 500;
+    }
+
+    .budget-table tr:hover td {
+        background: rgba(234, 229, 221, 0.03);
+    }
+
+    .budget-total td {
+        border-top: 2px solid var(--rose);
+        border-bottom: none;
+        padding-top: 28px;
+        font-weight: 600;
+    }
+
+    .budget-total td:last-child {
+        font-size: 28px;
+    }
+
+    .organic-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        margin-top: 48px;
+    }
+
+    .organic-card {
+        background: var(--graphite-deep);
+        border: 1px solid rgba(234, 229, 221, 0.08);
+        padding: 40px 32px;
+        position: relative;
+        transition: all 0.4s ease;
+        border-radius: 8px;
+    }
+
+    .organic-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--emerald), var(--rose));
+        border-radius: 8px 8px 0 0;
+    }
+
+    .organic-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--rose);
+    }
+
+    .organic-card h4 {
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: var(--text-light);
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        font-style: normal;
+    }
+
+    .organic-card p {
+        font-size: 13px;
+        color: var(--text-light-dim);
+        line-height: 1.65;
+        margin-bottom: 20px;
+    }
+
+    .organic-cost {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--rose);
+        padding-top: 16px;
+        border-top: 1px solid rgba(234, 229, 221, 0.08);
+        font-weight: 500;
+    }
+
+    .highlight-box {
+        background: var(--graphite-deep);
+        border: 1px solid rgba(230, 213, 208, 0.15);
+        border-left: 3px solid var(--rose);
+        padding: 36px 40px;
+        margin-top: 48px;
+        border-radius: 8px;
+    }
+
+    .highlight-box h4 {
+        font-size: 12px;
+        color: var(--rose);
+        margin-bottom: 14px;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-style: normal;
+    }
+
+    .highlight-box p {
+        font-size: 15px;
+        color: var(--text-light);
+        line-height: 1.75;
+    }
+
+    .highlight-box strong {
+        color: var(--rose);
+        font-weight: 600;
+    }
+
+    /* Differentiators - darker */
+    .differentiators {
+        background: var(--graphite-deep);
+        color: var(--text-light);
+    }
+
+    .differentiators .section-title { color: var(--text-light); }
+    .differentiators .section-lead { color: var(--text-light-dim); }
+    .differentiators .section-num { color: var(--rose); }
+
+    .diff-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+    }
+
+    .diff-card {
+        padding: 44px 36px;
+        background: var(--graphite-darkest);
+        border: 1px solid rgba(234, 229, 221, 0.06);
+        border-top: 3px solid var(--rose);
+        transition: all 0.4s ease;
+        border-radius: 8px;
+    }
+
+    .diff-card:hover {
+        transform: translateY(-6px);
+        border-top-color: var(--emerald);
+        border-color: rgba(230, 213, 208, 0.15);
+    }
+
+    .diff-card h4 {
+        font-size: 20px;
+        margin-bottom: 14px;
+        color: var(--text-light);
+        font-family: 'Cormorant Garamond', serif;
+        font-style: italic;
+        font-weight: 400;
+    }
+
+    .diff-card p {
+        font-size: 13px;
+        color: var(--text-light-dim);
+        line-height: 1.7;
+    }
+
+    footer {
+        padding: 72px 0 48px;
+        background: var(--graphite-darkest);
+        border-top: 1px solid rgba(234, 229, 221, 0.08);
+    }
+
+    .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: var(--text-light-dim);
+        letter-spacing: 0.05em;
+    }
+
+    .footer-inner a {
+        color: var(--rose);
+        text-decoration: none;
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(32px);
+        transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 960px) {
+        .container { padding: 0 24px; }
+        .nav-inner { padding: 18px 24px; }
+        .hero-grid, .philosophy-grid, .audience-grid, .finance-grid {
+            grid-template-columns: 1fr;
+            gap: 56px;
+        }
+        .hero-side { border-left: none; padding-left: 0; border-top: 1px solid rgba(0, 78, 47, 0.15); padding-top: 48px; }
+        .eco-grid, .diff-grid, .organic-grid { grid-template-columns: 1fr 1fr; }
+        .timeline-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
+        .timeline-grid::before { display: none; }
+        .kpi-grid { grid-template-columns: 1fr 1fr; }
+        .funnel-step { grid-template-columns: 50px 1fr; gap: 20px; padding: 28px; }
+        .funnel-format, .funnel-price { grid-column: 2; text-align: left; }
+        section { padding: 100px 0; }
+    }
+
+    @media (max-width: 600px) {
+        .eco-grid, .diff-grid, .timeline-grid, .kpi-grid, .organic-grid { grid-template-columns: 1fr; }
+        .hero-stats { grid-template-columns: 1fr; gap: 24px; }
+        .audience-card { padding: 36px 28px; }
+        .finance-card { padding: 32px 24px; }
+        .hero h1 { font-size: 2.5rem; }
+        .section-title { font-size: 2rem; }
+    }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <div class="logo">ПРОЕКТ «ПРОТОКОЛ»</div>
+        <div class="nav-meta">Бизнес-презентация · 2026</div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="fade-in">
+                <div class="eyebrow">Образовательный проект Жанны Елисеевой</div>
+                <h1>Система, в которой <em>VIP-клиенты</em> выстраиваются в очередь</h1>
+                <p class="hero-lead">
+                    Закрытая образовательная экосистема для турагентов, работающих с премиальным сегментом. Не курсы о продажах — а протокол коммуникации, этики и решений, которых нет в открытых источниках.
+                </p>
+                <div class="hero-stats">
+                    <div>
+                        <div class="stat-num">18</div>
+                        <div class="stat-label">лет в протоколе<br>посольства США</div>
+                    </div>
+                    <div>
+                        <div class="stat-num">7</div>
+                        <div class="stat-label">продуктов<br>в линейке</div>
+                    </div>
+                    <div>
+                        <div class="stat-num">2</div>
+                        <div class="stat-label">целевых<br>сегмента</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-side fade-in">
+                <div class="hero-side-label">Ключевые показатели</div>
+                <div class="hero-side-item">
+                    <span>Инвестиции на запуск</span>
+                    <span>31 400 ₽</span>
+                </div>
+                <div class="hero-side-item">
+                    <span>Точка безубыточности</span>
+                    <span>1-й месяц</span>
+                </div>
+                <div class="hero-side-item">
+                    <span>Целевой оборот / 6 мес.</span>
+                    <span>1,5 млн ₽</span>
+                </div>
+                <div class="hero-side-item">
+                    <span>Маржинальность</span>
+                    <span>до 85%</span>
+                </div>
+                <div class="hero-side-item">
+                    <span>Средний чек линейки</span>
+                    <span>29 000 ₽</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Philosophy -->
+<section class="philosophy">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">01 · Философия</div>
+            <h2 class="section-title">Не «успешный успех». Протокол.</h2>
+            <p class="section-lead">
+                Рынок переполнен курсами о том, как бронировать туры и накручивать комиссии. Мы занимаем противоположную нишу — обучаем искусству и стратегии работы на высшем уровне.
+            </p>
+        </div>
+        <div class="philosophy-grid fade-in">
+            <div class="philosophy-quote">
+                «Я не учу продавать туры. Я учу выстраивать систему, в которой VIP-клиенты платят сервисный сбор, прощают форс-мажоры и возвращаются годами — потому что вы владеете протоколом, которого нет в открытых источниках.»
+            </div>
+            <div class="philosophy-points">
+                <div class="phil-point">
+                    <div class="phil-num">I.</div>
+                    <div>
+                        <h4>Цена отражает позиционирование</h4>
+                        <p>Нельзя учить брать сервисный сбор 50 000 ₽, продавая семинары за 3 000 ₽. Цены — первый урок.</p>
+                    </div>
+                </div>
+                <div class="phil-point">
+                    <div class="phil-num">II.</div>
+                    <div>
+                        <h4>Путь доверия, а не разовая продажа</h4>
+                        <p>Подкаст → Клуб → Запись → Семинар → Офлайн → Консультация → B2B. Каждый шаг увеличивает чек.</p>
+                    </div>
+                </div>
+                <div class="phil-point">
+                    <div class="phil-num">III.</div>
+                    <div>
+                        <h4>Клуб — инфраструктура, а не чат</h4>
+                        <p>Шаблоны, которые агент открывает перед каждым клиентом. Разборы по понедельникам. Часть рабочей недели.</p>
+                    </div>
+                </div>
+                <div class="phil-point">
+                    <div class="phil-num">IV.</div>
+                    <div>
+                        <h4>B2B — самый высокомаржинальный продукт</h4>
+                        <p>Одна продажа = 150 000–250 000 ₽. Руководители приходят через консультацию за 35 000 ₽.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Audience -->
+<section>
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">02 · Целевая аудитория</div>
+            <h2 class="section-title">Два сегмента. Одна система.</h2>
+            <p class="section-lead">
+                Продуктовая линейка построена так, чтобы каждый сегмент получал релевантный входной билет и путь роста внутри экосистемы.
+            </p>
+        </div>
+        <div class="audience-grid fade-in">
+            <div class="audience-card">
+                <div class="audience-tag">Сегмент А</div>
+                <h3>Действующие VIP-агенты</h3>
+                <div class="audience-meta">
+                    Средний чек от <strong>1 000 000 ₽</strong> · Отели 5* и люкс · Уже работают с состоятельными клиентами
+                </div>
+                <ul class="audience-list">
+                    <li>Нужна системность и тайм-менеджмент</li>
+                    <li>Удержание дорогих клиентов годами</li>
+                    <li>Поиск новых VIP через нетворкинг</li>
+                    <li>Делегирование и построение команды</li>
+                    <li>Готовы платить за закрытые знания</li>
+                </ul>
+            </div>
+            <div class="audience-card">
+                <div class="audience-tag">Сегмент Б</div>
+                <h3>Агенты масс-маркета</h3>
+                <div class="audience-meta">
+                    Средний чек <strong>до 300 000 ₽</strong> · Мечтают о переходе в VIP · Теряют время на «дешёвых» клиентах
+                </div>
+                <ul class="audience-list">
+                    <li>Не умеют продавать себя и экспертизу</li>
+                    <li>Не знают, где искать богатых клиентов</li>
+                    <li>Боятся назвать сервисный сбор</li>
+                    <li>Тратят часы на клиентов, уходящих из-за 1 000 ₽</li>
+                    <li>Не переводят связи в клиентов</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products -->
+<section class="products">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">03 · Продуктовая линейка</div>
+            <h2 class="section-title">Воронка доверия</h2>
+            <p class="section-lead">
+                Семь продуктов. Каждый закрывает конкретную задачу на пути клиента. Человек не покупает сразу самое дорогое — он проходит путь.
+            </p>
+        </div>
+        <div class="funnel fade-in">
+            <div class="funnel-step">
+                <div class="funnel-num">01</div>
+                <div>
+                    <div class="funnel-name">Подкаст «Протокол»</div>
+                    <div class="funnel-desc">Аудио-манифест. Еженедельные разборы реальных кейсов</div>
+                </div>
+                <div class="funnel-format">Яндекс · VK · Telegram</div>
+                <div class="funnel-price">Бесплатно</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">02</div>
+                <div>
+                    <div class="funnel-name">Клуб «PROTOCOL»</div>
+                    <div class="funnel-desc">Закрытое сообщество, шаблоны, разборы, Zoom-эфиры</div>
+                </div>
+                <div class="funnel-format">Подписка · Telegram + Zoom</div>
+                <div class="funnel-price">6 900 ₽/мес</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">03</div>
+                <div>
+                    <div class="funnel-name">Записи семинаров</div>
+                    <div class="funnel-desc">Видео + PDF-тетрадь. Входной платёж, проверка ценности</div>
+                </div>
+                <div class="funnel-format">Библиотека · Постоянно</div>
+                <div class="funnel-price">9 900 ₽</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">04</div>
+                <div>
+                    <div class="funnel-name">Онлайн-семинары × 3</div>
+                    <div class="funnel-desc">«Вход в круг» · «Протокол доверия» · «Архитектура маршрута»</div>
+                </div>
+                <div class="funnel-format">Февраль · Июнь · Октябрь</div>
+                <div class="funnel-price">29 000 ₽</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">05</div>
+                <div>
+                    <div class="funnel-name">Офлайн-интенсив</div>
+                    <div class="funnel-desc">30 участников. Ролевые игры, ужин, «Книга протокола»</div>
+                </div>
+                <div class="funnel-format">Ноябрь · Москва · Без записи</div>
+                <div class="funnel-price">89 000 ₽</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">06</div>
+                <div>
+                    <div class="funnel-name">Индивидуальные консультации</div>
+                    <div class="funnel-desc">«Диагностика маршрута» · «Стратегическая сессия»</div>
+                </div>
+                <div class="funnel-format">60 минут · Zoom · По записи</div>
+                <div class="funnel-price">19 / 35 тыс. ₽</div>
+            </div>
+            <div class="funnel-step">
+                <div class="funnel-num">07</div>
+                <div>
+                    <div class="funnel-name">Корпоративное обучение (B2B)</div>
+                    <div class="funnel-desc">3 программы под запрос компании. Онлайн или офлайн</div>
+                </div>
+                <div class="funnel-format">По запросу · До 15 участников</div>
+                <div class="funnel-price">от 150 000 ₽</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ecosystem -->
+<section>
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">04 · Экосистема</div>
+            <h2 class="section-title">Четыре компонента системы</h2>
+            <p class="section-lead">
+                Лендинг принимает трафик. Подкаст прогревает. AMOCRM квалифицирует и ведёт. Платёжный шлюз закрывает сделку. Всё связано в единый цикл.
+            </p>
+        </div>
+        <div class="eco-grid fade-in">
+            <div class="eco-card">
+                <div class="eco-icon">I</div>
+                <h4>Лендинг</h4>
+                <p>Премиальная посадочная страница с калькулятором потерь, видеовизиткой и формой захвата на 3 поля.</p>
+                <div class="eco-tools">Tilda · eliseevazhanna.ru</div>
+            </div>
+            <div class="eco-card">
+                <div class="eco-icon">II</div>
+                <h4>Подкаст</h4>
+                <p>10 выпусков с инсайтами из дипломатического протокола. Дистрибуция через Mave Digital на 4 площадки.</p>
+                <div class="eco-tools">Mave · Яндекс · VK · TG</div>
+            </div>
+            <div class="eco-card">
+                <div class="eco-icon">III</div>
+                <h4>AMOCRM</h4>
+                <p>Многоступенчатая воронка, сегментация по тегам, автосценарии прогрева и реанимации «спящих» VIP.</p>
+                <div class="eco-tools">amoCRM · Telegram-бот</div>
+            </div>
+            <div class="eco-card">
+                <div class="eco-icon">IV</div>
+                <h4>Приём оплаты</h4>
+                <p>ЮKassa + СБП для карт. CloudPayments для подписок. Оплата по счёту для B2B. Рассрочка до 24 мес.</p>
+                <div class="eco-tools">ЮKassa · CloudPayments</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline -->
+<section class="timeline">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">05 · Этапы запуска</div>
+            <h2 class="section-title">Дорожная карта на 6 месяцев</h2>
+            <p class="section-lead">
+                От нуля до работающей экосистемы с первым офлайн-интенсивом. Без раздутых бюджетов — за счёт органического роста и личных связей.
+            </p>
+        </div>
+        <div class="timeline-grid fade-in">
+            <div class="timeline-step">
+                <div class="timeline-dot">I</div>
+                <div class="timeline-period">Месяц 1</div>
+                <h4>Фундамент</h4>
+                <ul>
+                    <li>Домен и хостинг</li>
+                    <li>Сборка лендинга на Tilda</li>
+                    <li>Настройка AMOCRM и Telegram-бота</li>
+                    <li>Подключение ЮKassa</li>
+                    <li>Запись 3 первых выпусков подкаста</li>
+                </ul>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">II</div>
+                <div class="timeline-period">Месяц 2</div>
+                <h4>Органический старт</h4>
+                <ul>
+                    <li>Запуск подкаста на 4 площадках</li>
+                    <li>Активация личного Telegram-канала</li>
+                    <li>Запуск Клуба «PROTOCOL»</li>
+                    <li>Продажа записей семинаров</li>
+                    <li>Первые консультации по сарафану</li>
+                </ul>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">III</div>
+                <div class="timeline-period">Месяц 3</div>
+                <h4>Первый живой семинар</h4>
+                <ul>
+                    <li>Онлайн-семинар «Вход в круг»</li>
+                    <li>Партнёрства с турагентскими чатами</li>
+                    <li>Первые B2B-переговоры</li>
+                    <li>Сбор кейсов и отзывов</li>
+                    <li>Оптимизация воронки</li>
+                </ul>
+            </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">IV</div>
+                <div class="timeline-period">Месяц 4–6</div>
+                <h4>Масштабирование</h4>
+                <ul>
+                    <li>Семинары «Протокол доверия» и «Архитектура»</li>
+                    <li>Индивидуальные консультации</li>
+                    <li>Первые корпоративные контракты</li>
+                    <li>Ноябрьский офлайн-интенсив</li>
+                    <li>Годовые подписки в клуб</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Finance -->
+<section class="finance">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">06 · Финансы</div>
+            <h2 class="section-title">Экономика проекта</h2>
+            <p class="section-lead">
+                Минимальные фиксированные затраты. Высокая маржинальность цифровых продуктов. Рост среднего чека по мере движения клиента по воронке. Без рекламного бюджета — за счёт органики и личных каналов.
+            </p>
+        </div>
+
+        <div class="finance-grid fade-in">
+            <div class="finance-card">
+                <h3>Прогноз выручки</h3>
+                <div class="finance-card-sub">Накопленным итогом, 6 месяцев · органический рост</div>
+                <div class="chart-wrap">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="finance-card">
+                <h3>Структура выручки</h3>
+                <div class="finance-card-sub">Доля каждого продукта в обороте</div>
+                <div class="chart-wrap">
+                    <canvas id="structureChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="fade-in">
+            <h3 style="font-size: 24px; margin-bottom: 12px; color: var(--text-light); font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;">Бюджет на запуск (3 месяца)</h3>
+            <p style="color: var(--text-light-dim); font-size: 14px; margin-bottom: 32px;">Минимально необходимые инвестиции — только обязательные сервисы. Без рекламного бюджета.</p>
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th>Статья расходов</th>
+                        <th>Комментарий</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Сайт (Tilda + шаблон)</td>
+                        <td>Тариф Business + премиум-шаблон</td>
+                        <td>7 500 ₽</td>
+                    </tr>
+                    <tr>
+                        <td>AMOCRM</td>
+                        <td>Настройка фрилансером + подписка</td>
+                        <td>23 500 ₽</td>
+                    </tr>
+                    <tr>
+                        <td>Домен и подкаст</td>
+                        <td>eliseevazhanna.ru + Mave Digital</td>
+                        <td>400 ₽</td>
+                    </tr>
+                    <tr>
+                        <td>Платёжный шлюз</td>
+                        <td>Комиссия 3.5% — с оборота</td>
+                        <td>0 ₽</td>
+                    </tr>
+                    <tr class="budget-total">
+                        <td colspan="2">Итого инвестиции на запуск</td>
+                        <td>31 400 ₽</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h4>Откуда брать трафик без рекламного бюджета</h4>
+                <p>
+                    Органический рост строится на трёх источниках: <strong>подкаст</strong> (еженедельный выпуск на Яндекс/VK/Telegram — бесплатный охват), <strong>личный Telegram-канал</strong> Жанны (прогрев существующей аудитории), <strong>партнёрства</strong> с турагентскими сообществами и чатами (взаимные публикации, гостевые выпуски, совместные вебинары). Первые клиенты приходят через сарафанное радио и нетворкинг — это естественный канал для VIP-сегмента.
+                </p>
+            </div>
+        </div>
+
+        <div class="fade-in" style="margin-top: 100px;">
+            <h3 style="font-size: 24px; margin-bottom: 12px; color: var(--text-light); font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;">Органические каналы привлечения</h3>
+            <p style="color: var(--text-light-dim); font-size: 14px; margin-bottom: 32px;">Бесплатные и условно-бесплатные источники трафика, которые заменяют рекламный бюджет на старте</p>
+        </div>
+
+        <div class="organic-grid fade-in">
+            <div class="organic-card">
+                <h4>Подкаст на 4 площадках</h4>
+                <p>Еженедельный выпуск на Яндекс.Музыке, VK, Telegram, Apple/Spotify (через RSS). Каждая площадка — бесплатный органический охват.</p>
+                <div class="organic-cost">Стоимость: 0 ₽/мес</div>
+            </div>
+            <div class="organic-card">
+                <h4>Личный Telegram-канал</h4>
+                <p>Ежедневные посты, разборы кейсов, анонсы. Аудитория Жанны уже есть — её нужно активировать и вести по воронке.</p>
+                <div class="organic-cost">Стоимость: 0 ₽/мес</div>
+            </div>
+            <div class="organic-card">
+                <h4>Партнёрства и нетворкинг</h4>
+                <p>Гостевые выпуски в каналах турагентов, совместные вебинары, выступления в профессиональных чатах. Бартер вместо денег.</p>
+                <div class="organic-cost">Стоимость: 0 ₽/мес</div>
+            </div>
+            <div class="organic-card">
+                <h4>Сарафанное радио</h4>
+                <p>VIP-агенты рекомендуют друг другу. Один довольный клиент в сегменте А приводит 2–3 новых в течение года.</p>
+                <div class="organic-cost">Стоимость: 0 ₽/мес</div>
+            </div>
+            <div class="organic-card">
+                <h4>SEO-статьи на лендинге</h4>
+                <p>Блог с разборами кейсов и инсайтами. Долгосрочный канал, который приведёт органический трафик из Яндекса через 3–6 месяцев.</p>
+                <div class="organic-cost">Стоимость: 0 ₽/мес</div>
+            </div>
+            <div class="organic-card">
+                <h4>Посевы (опционально, позже)</h4>
+                <p>Когда появятся первые деньги от клуба и консультаций — реинвестировать 20–30% в Telegram-посевы для ускорения роста.</p>
+                <div class="organic-cost">Из прибыли проекта</div>
+            </div>
+        </div>
+
+        <div class="kpi-grid fade-in">
+            <div class="kpi">
+                <div class="kpi-label">Точка безубыточности</div>
+                <div class="kpi-value">1 мес.</div>
+                <div class="kpi-note">5 клубов + 2 записи = 48 300 ₽ в первый месяц</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Выручка 6 месяцев</div>
+                <div class="kpi-value">1,5 млн ₽</div>
+                <div class="kpi-note">Консервативный сценарий на органике</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">Маржинальность</div>
+                <div class="kpi-value">85%</div>
+                <div class="kpi-note">Цифровые продукты без переменных затрат</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-label">ROI инвестиций</div>
+                <div class="kpi-value">×48</div>
+                <div class="kpi-note">31 400 ₽ вложений → 1,5 млн ₽ выручки</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Differentiators -->
+<section class="differentiators">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-num">07 · Конкурентные преимущества</div>
+            <h2 class="section-title">Почему этот проект взлетит</h2>
+            <p class="section-lead">
+                Анализ рынка (Novospace, Магировская, Слетать.ру, SunAgent) показывает пять «белых пятен», которые проект занимает первым.
+            </p>
+        </div>
+        <div class="diff-grid fade-in">
+            <div class="diff-card">
+                <h4>Уникальный бэкграунд</h4>
+                <p>18 лет в отделе протокола посольства США. Ни один конкурент не имеет аналогичной экспертизы в работе с первыми лицами.</p>
+            </div>
+            <div class="diff-card">
+                <h4>Финансовая «кухня» 2026</h4>
+                <p>Легальные цепочки расчётов, когда SWIFT не работает. Крипта, счета третьих лиц, защита от 115-ФЗ. Конкуренты молчат.</p>
+            </div>
+            <div class="diff-card">
+                <h4>Анатомия провалов</h4>
+                <p>Разбор реальных fuckup-кейсов, а не только «успешного успеха». Овербукинг, форс-мажоры, репутационные атаки.</p>
+            </div>
+            <div class="diff-card">
+                <h4>Цифровой протокол</h4>
+                <p>Этикет в WhatsApp/Telegram: тайминг ответов, допустимые эмодзи, оформление PDF. Уникальный модуль, которого нет на рынке.</p>
+            </div>
+            <div class="diff-card">
+                <h4>Офлайн-нетворкинг</h4>
+                <p>Иммерсивный день на 30 человек без записи. Конкуренты делают ставку на масштабируемость онлайн — мы на глубину контакта.</p>
+            </div>
+            <div class="diff-card">
+                <h4>Репутационная безопасность</h4>
+                <p>Цифровая гигиена агента: что можно писать в мессенджерах, как защититься от клеветы, алгоритм при репутационной атаке.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <div>© 2026 · Проект «Протокол» · Конфиденциально</div>
+            <div>Подготовлено для <a href="https://zhannaeliseeva.ru/" target="_blank">Жанны Елисеевой</a></div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Scroll progress bar + nav inversion
+    const progressBar = document.getElementById('progressBar');
+    const nav = document.getElementById('nav');
+    const heroSection = document.querySelector('.hero');
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        progressBar.style.width = scrollPercent + '%';
+
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        if (scrollTop > heroBottom * 0.7) {
+            progressBar.classList.add('inverted');
+            nav.classList.add('scrolled');
+        } else {
+            progressBar.classList.remove('inverted');
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // Revenue chart
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: ['Мес. 1', 'Мес. 2', 'Мес. 3', 'Мес. 4', 'Мес. 5', 'Мес. 6'],
+            datasets: [{
+                label: 'Выручка, тыс. ₽',
+                data: [48, 120, 240, 400, 600, 850],
+                borderColor: '#004E2F',
+                backgroundColor: 'rgba(0, 78, 47, 0.15)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#004E2F',
+                pointBorderColor: '#EAE5DD',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1F1F1F',
+                    borderColor: '#004E2F',
+                    borderWidth: 1,
+                    titleColor: '#E6D5D0',
+                    bodyColor: '#EAE5DD',
+                    titleFont: { family: 'Cormorant Garamond', size: 14, style: 'italic' },
+                    bodyFont: { family: 'Manrope', size: 12 },
+                    padding: 14,
+                    callbacks: {
+                        label: (ctx) => ctx.parsed.y + ' тыс. ₽'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(234, 229, 221, 0.06)' },
+                    ticks: { color: 'rgba(234, 229, 221, 0.5)', font: { size: 11, family: 'Manrope' } }
+                },
+                y: {
+                    grid: { color: 'rgba(234, 229, 221, 0.06)' },
+                    ticks: {
+                        color: 'rgba(234, 229, 221, 0.5)',
+                        font: { size: 11, family: 'Manrope' },
+                        callback: (v) => v + 'k'
+                    }
+                }
+            }
+        }
+    });
+
+    // Structure chart
+    const structureCtx = document.getElementById('structureChart').getContext('2d');
+    new Chart(structureCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Клуб PROTOCOL', 'Онлайн-семинары', 'Консультации', 'B2B-обучение', 'Записи', 'Офлайн-интенсив'],
+            datasets: [{
+                data: [25, 28, 18, 17, 8, 4],
+                backgroundColor: [
+                    '#004E2F',
+                    '#E6D5D0',
+                    '#006B40',
+                    '#5A8A72',
+                    '#D9C0B9',
+                    '#3D5A4A'
+                ],
+                borderColor: '#1F1F1F',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: 'rgba(234, 229, 221, 0.6)',
+                        font: { size: 11, family: 'Manrope' },
+                        padding: 14,
+                        boxWidth: 12,
+                        boxHeight: 12
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1F1F1F',
+                    borderColor: '#004E2F',
+                    borderWidth: 1,
+                    titleColor: '#E6D5D0',
+                    bodyColor: '#EAE5DD',
+                    titleFont: { family: 'Cormorant Garamond', size: 14, style: 'italic' },
+                    callbacks: {
+                        label: (ctx) => ctx.label + ': ' + ctx.parsed + '%'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
+```
